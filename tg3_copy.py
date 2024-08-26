@@ -6,11 +6,9 @@ import json
 api_code = '####'
 bot = telebot.TeleBot(api_code)
 
-
 MEMES_DIR = 'C:/Users/vital/Desktop/TG BOT/memes'
 jsonpath = "C:/Users/vital/Desktop/TG BOT/json"
 USER_INFO_FILE = os.path.join(jsonpath, 'user_info.json')
-
 
 if not os.path.exists(MEMES_DIR):
     os.makedirs(MEMES_DIR)
@@ -51,6 +49,7 @@ def handle_status(message):
 
 ADMIN_USER_IDS = [1918737583]  # Replace with your own admin user IDs
 
+
 @bot.message_handler(content_types=['photo'], func=lambda message: message.from_user.id not in ADMIN_USER_IDS)
 def handle_default_user_image(message):
     user_id = message.from_user.id
@@ -74,13 +73,14 @@ def handle_default_user_image(message):
 
     bot.reply_to(message, "Мем получен. я посмотрю его и обязательно выложу если он крутой)")
 
+
 @bot.message_handler(content_types=['photo'], func=lambda message: message.from_user.id in ADMIN_USER_IDS)
 def handle_admin_image(message):
     user_id = message.from_user.id
     file_id = message.photo[-1].file_id
     file_info = bot.get_file(file_id)
     image = bot.download_file(file_info.file_path)
-    
+
     image_name = f"admin_meme_{file_id}.jpg"  # You can generate a unique name for the image
     image_path = os.path.join(MEMES_DIR, image_name)
     with open(image_path, 'wb') as new_image:
@@ -92,13 +92,14 @@ def handle_admin_image(message):
         json.dump(user_memes, f)
     bot.reply_to(message, "Мем добавлен")
 
+
 # Для простых юзеров отдельные функции для предложки
 @bot.message_handler(content_types=['photo'])
 def handle_user_image(message):
     bot.reply_to(message, "Мем получен. я посмотрю его и обязательно выложу если он крутой)")
 
 
-#Можно получить мем
+# Можно получить мем
 @bot.message_handler(commands=['meme'])
 def handle_meme(message):
     user_id = message.from_user.id
@@ -127,5 +128,6 @@ def handle_meme(message):
 
     with open(USER_INFO_FILE, 'w') as f:
         json.dump(user_memes, f)
+
 
 bot.polling()
