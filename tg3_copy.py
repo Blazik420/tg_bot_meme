@@ -4,7 +4,6 @@ import telebot
 import json
 
 api_code = '####'
-# Initialize your bot with the API token
 bot = telebot.TeleBot(api_code)
 
 
